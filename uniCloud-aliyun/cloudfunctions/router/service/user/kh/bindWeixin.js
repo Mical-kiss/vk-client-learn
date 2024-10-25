@@ -21,7 +21,7 @@ module.exports = {
 			appid: myAppId,
 			encryptedKey: myEncryptedKey
 		} = data;
-		
+
 		if (vk.pubfn.isNullAll(code, myEncryptedKey)) {
 			return { code: -1, msg: "code不能为空" };
 		}
@@ -43,7 +43,7 @@ module.exports = {
 			customConfig.appid = myAppId;
 		}
 		// customConfig.appsecret = "xxxx";
-		
+
 		// code获取openid
 		let code2SessionRes = await vk.openapi.weixin.auth.code2Session({
 			context: originalParam.context, // 内部会根据context来判断是小程序还是APP还是公众号

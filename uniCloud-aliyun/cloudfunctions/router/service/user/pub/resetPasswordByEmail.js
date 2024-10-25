@@ -12,34 +12,34 @@ module.exports = {
 	 */
 	main: async (event) => {
 		let { data = {}, util, originalParam } = event;
-		let { uniID, config, pubFun, vk , db, _ } = util;
-		let { 
+		let { uniID, config, pubFun, vk, db, _ } = util;
+		let {
 			_id,
 			password,
 			code,
 			email
 		} = data;
-		let res = { code : -1, msg : '' };
+		let res = { code: -1, msg: '' };
 		// 业务逻辑开始----------------------------------------------------------- 
 		// 可写与数据库的交互逻辑等等
 		// 检查验证码是否正确
 		res = await uniID.verifyCode({
 			email,
 			code,
-			type: 'reset-pwd',  // 自2022-08-13起，以从reset改为reset-pwd，与官方uni-id对齐
+			type: 'reset-pwd', // 自2022-08-13起，以从reset改为reset-pwd，与官方uni-id对齐
 		});
-		if(res.code !== 0){
+		if (res.code !== 0) {
 			return res;
 		}
 		// 根据email查询用户是否存在
 		let userInfo = await vk.baseDao.findByWhereJson({
-			dbName:"uni-id-users",
-			whereJson:{
+			dbName: "uni-id-users",
+			whereJson: {
 				email
 			}
 		});
-		if(!userInfo){
-			return { code : -1, msg : '邮箱号未注册!' };
+		if (!userInfo) {
+			return { code: -1, msg: '邮箱号未注册!' };
 		}
 		// 重置密码
 		res = await uniID.resetPwd({

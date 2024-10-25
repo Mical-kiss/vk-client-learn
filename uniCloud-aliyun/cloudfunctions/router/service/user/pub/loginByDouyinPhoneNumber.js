@@ -32,7 +32,7 @@ module.exports = {
 			encryptedKey,
 			code,
 		} = data;
-		
+
 		// 标记当前平台的provider
 		const provider = "douyin";
 		const providerName = "抖音";

@@ -9,9 +9,9 @@ module.exports = {
 	 */
 	main: async (event) => {
 		let { data = {}, userInfo, util, filterResponse, originalParam } = event;
-		let { customUtil, uniID, config, pubFun, vk , db, _ } = util;
+		let { customUtil, uniID, config, pubFun, vk, db, _ } = util;
 		let { uid } = data;
-		let res = { code : 0, msg : '' };
+		let res = { code: 0, msg: '' };
 		// 业务逻辑开始-----------------------------------------------------------
 		let {
 			role = [],
@@ -19,7 +19,7 @@ module.exports = {
 		// 根据角色获取菜单
 		res = await vk.system.sysDao.listMenuByRole({
 			role,
-			treeProps:{
+			treeProps: {
 				level: 3
 			}
 		});

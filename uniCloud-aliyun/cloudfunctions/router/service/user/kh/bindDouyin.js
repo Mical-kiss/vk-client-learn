@@ -22,7 +22,7 @@ module.exports = {
 			appid: myAppId,
 			encryptedKey: myEncryptedKey
 		} = data;
-		
+
 		if (vk.pubfn.isNullAll(code, myEncryptedKey)) {
 			return { code: -1, msg: "code不能为空" };
 		}

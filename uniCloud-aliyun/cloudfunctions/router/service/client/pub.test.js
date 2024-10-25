@@ -72,7 +72,7 @@ var cloudObject = {
 	 */
 	test1: async function(data) {
 		let { uid, filterResponse, originalParam } = this.getClientInfo(); // 获取客户端信息
-		let res = { code: 0, msg: 'test1 返回成功' };
+		let res = { code: 0, msg: '' };
 		// 业务逻辑开始-----------------------------------------------------------
 		console.log("test1请求参数", data);
 		let res1 = await this.getInfo(data);

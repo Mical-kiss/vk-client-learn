@@ -21,7 +21,7 @@ module.exports = {
 		// 用户登录(账号+密码)
 		if (typeof data.username === "number") data.username = String(data.username).trim();
 		if (typeof data.password === "number") data.password = String(data.password).trim();
-		
+
 		let {
 			needPermission,
 			username,

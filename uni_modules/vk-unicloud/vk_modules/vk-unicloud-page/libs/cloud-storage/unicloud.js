@@ -125,7 +125,8 @@ function createFileName(obj = {}) {
 	return cloudPath;
 }
 
-function getCloudPath(url) {
+function getCloudPath(url="") {
+	url = url.split("?")[0];
 	let cloudPath = "";
 	const match = url.match(/(?:https?:\/\/)?([^/]+)(\/.*)/);
 	if (match && match[2]) {

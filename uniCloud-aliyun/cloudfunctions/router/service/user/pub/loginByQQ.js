@@ -22,14 +22,12 @@ module.exports = {
 			code,
 			accessToken,
 			type,
-			myInviteCode,
 			needPermission
 		} = data;
 		res = await uniID.loginByQQ({
 			code,
 			accessToken,
 			type,
-			myInviteCode,
 			needPermission
 		});
 		if (res.token) {

@@ -1,6 +1,6 @@
 {
     "name": "uni-id",
-    "version": "3.3.28",
+    "version": "3.3.32",
     "description": "uni-id for uniCloud",
     "main": "index.js",
     "homepage": "https:\/\/uniapp.dcloud.io\/uniCloud\/uni-id",
@@ -14,7 +14,7 @@
         "uni-config-center": "file:..\/..\/..\/..\/..\/uni-config-center\/uniCloud\/cloudfunctions\/common\/uni-config-center"
     },
     "origin-plugin-dev-name": "vk-cloud-router",
-    "origin-plugin-version": "2.18.15",
+    "origin-plugin-version": "2.18.19",
     "plugin-dev-name": "vk-cloud-router",
-    "plugin-version": "2.18.15"
+    "plugin-version": "2.18.19"
 }

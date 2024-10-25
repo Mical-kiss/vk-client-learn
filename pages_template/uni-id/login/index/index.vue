@@ -9,7 +9,7 @@
 
 				<view class="form-item form-border">
 					<!-- 文本框 -->
-					<input class="form-input" v-model="form1.username" type="text" :maxlength="50" placeholder="用户名/手机号123" placeholder-style="'color':'#8e8e8e'" />
+					<input class="form-input" v-model="form1.username" type="text" :maxlength="50" placeholder="用户名/手机号" placeholder-style="'color':'#8e8e8e'" />
 				</view>
 				<view class="form-item form-border">
 					<!-- 文本框 -->

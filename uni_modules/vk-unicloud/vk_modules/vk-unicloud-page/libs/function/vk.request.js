@@ -194,7 +194,7 @@ requestUtil.request = function(obj = {}) {
 		Logger.url = url;
 	}
 	if (obj.title) vk.showLoading(obj.title);
-	if (obj.loading) vk.setLoading(true, obj.loading);
+	if (obj.loading) Logger.loading = vk.setLoading(true, obj.loading);
 	let decryptFn;
 	if (obj.encrypt) {
 		let encryptRes = vk.crypto.encryptCallFunction(obj, "request");
@@ -272,47 +272,54 @@ function requestSuccess(obj = {}) {
 		errorCodeName,
 		errorMsgName,
 		success,
-		loading
+		loading,
+		responseType
 	} = params;
 	let data = res.data || {};
-	if (vk.pubfn.isNotNullAll(errorCodeName, data[errorCodeName])) {
-		data.code = data[errorCodeName];
-		delete data[errorCodeName];
-	}
-	if (vk.pubfn.isNotNullAll(errorMsgName, data[errorMsgName])) {
-		data.msg = data[errorMsgName];
-		if (typeof data[errorMsgName] === "string") {
-			delete data[errorMsgName];
+	if (responseType !== "arraybuffer") {
+		if (vk.pubfn.isNotNullAll(errorCodeName, data[errorCodeName])) {
+			data.code = data[errorCodeName];
+			delete data[errorCodeName];
 		}
-	}
-	if (config.debug) Logger.result = (typeof data == "object") ? vk.pubfn.copyObject(data) : data;
-	if ([1301, 1302, 30201, 30202, 30203, 30204].indexOf(data.code) > -1 && data.msg.indexOf("token") > -1) {
-		// 执行 login 拦截器函数（跳转到页面页面）
-		let { interceptor = {} } = vk.callFunctionUtil;
-		if (typeof interceptor.login === "function") {
-			interceptor.login({
+		if (vk.pubfn.isNotNullAll(errorMsgName, data[errorMsgName])) {
+			data.msg = data[errorMsgName];
+			if (typeof data[errorMsgName] === "string") {
+				delete data[errorMsgName];
+			}
+		}
+		if (config.debug) Logger.result = (typeof data == "object") ? vk.pubfn.copyObject(data) : data;
+		if ([1301, 1302, 30201, 30202, 30203, 30204].indexOf(data.code) > -1 && data.msg.indexOf("token") > -1) {
+			// 执行 login 拦截器函数（跳转到页面页面）
+			let { interceptor = {} } = vk.callFunctionUtil;
+			if (typeof interceptor.login === "function") {
+				interceptor.login({
+					res: data,
+					params,
+					vk
+				});
+			}
+			reject(data);
+			return;
+		} else if (res.statusCode >= 400 || data.code) {
+			requestFail({
 				res: data,
 				params,
-				vk
+				Logger,
+				reject
 			});
+			return;
 		}
-		reject(data);
-	} else if (res.statusCode >= 400 || data.code) {
-		requestFail({
-			res: data,
-			params,
-			Logger,
-			reject
-		});
-	} else {
-		if (title) vk.hideLoading();
-		if (loading) vk.setLoading(false, loading);
-		if (needOriginalRes) data.originalRes = vk.pubfn.copyObject(res);
+		if (needOriginalRes) data.originalRes = res;
 		if (data.vk_uni_token) vk.callFunctionUtil.saveToken(data.vk_uni_token);
 		if (data.userInfo && data.needUpdateUserInfo) vk.callFunctionUtil.updateUserInfo(data);
-		if (typeof success === "function") success(data);
-		if (typeof resolve === "function") resolve(data);
 	}
+	if (title) vk.hideLoading();
+	if (loading) {
+		vk.setLoading(false, Logger.loading);
+		Logger.loading = null;
+	}
+	if (typeof success === "function") success(data);
+	if (typeof resolve === "function") resolve(data);
 }
 
 // 请求失败回调
@@ -349,7 +356,10 @@ function requestFail(obj = {}) {
 	}
 	if (config.debug) Logger.error = res;
 	if (title) vk.hideLoading();
-	if (loading) vk.setLoading(false, loading);
+	if (loading) {
+		vk.setLoading(false, Logger.loading);
+		Logger.loading = null;
+	}
 	let runKey = true;
 	// 自定义拦截器开始-----------------------------------------------------------
 	let { interceptor = {} } = vk.callFunctionUtil.getConfig();
@@ -418,6 +428,7 @@ function requestComplete(obj = {}) {
 	let data = res.data;
 	if (needOriginalRes) data.originalRes = vk.pubfn.copyObject(res);
 	if (typeof complete === "function") complete(data);
+	Logger = null; // 释放内存
 }
 
 /**

@@ -21,12 +21,11 @@ module.exports = {
 		// 业务逻辑开始-----------------------------------------------------------
 		if (typeof data.username === "number") data.username = String(data.username).trim();
 		if (typeof data.password === "number") data.password = String(data.password).trim();
-		
+
 		let {
 			username,
 			password,
 			needPermission,
-			myInviteCode
 		} = data;
 
 		// 验证规则开始 -----------------------------------------------------------
@@ -52,8 +51,7 @@ module.exports = {
 		res = await uniID.register({
 			username,
 			password,
-			needPermission,
-			myInviteCode
+			needPermission
 		});
 		// 业务逻辑结束-----------------------------------------------------------
 		return res;

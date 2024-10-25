@@ -48,7 +48,7 @@ module.exports = {
 				realityExtStorageConfig[key] = extStorageConfig[key];
 			}
 		}
-		
+
 		// 然后获取 extStorageManager 对象实例
 		const extStorageManager = uniCloud.getExtStorageManager(realityExtStorageConfig);
 		// 最后调用 extStorageManager.getUploadFileOptions

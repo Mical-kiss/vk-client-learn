@@ -602,18 +602,33 @@ dao.resetPwd = async (data) => {
  * 调用示例
 await vk.daoCenter.userDao.getValidInviteCode();
  */
-dao.getValidInviteCode = async (data) => {
+dao.getValidInviteCode = async (data = {}) => {
 	let { vk, db, _ } = util;
 	// 数据库操作开始-----------------------------------------------------------
-	let inviteCode = await vk.pubfn.randomAsync(6, "23456789ABCDEFGHJKLMNPQRSTUVWXYZ", async (val)=>{
+	let {
+		my_invite_code
+	} = data;
+	if (my_invite_code) {
+		// 如果用户传了自定义的分享码，也需要判断下是否存在
 		let num = await vk.baseDao.count({
 			dbName: dbName.user,
-			whereJson:{
+			whereJson: {
+				my_invite_code
+			}
+		});
+		if (num === 0) {
+			return my_invite_code;
+		}
+	}
+	let inviteCode = await vk.pubfn.randomAsync(6, "23456789ABCDEFGHJKLMNPQRSTUVWXYZ", async (val) => {
+		let num = await vk.baseDao.count({
+			dbName: dbName.user,
+			whereJson: {
 				my_invite_code: val
 			}
-		}, 10); // 最大重试10次
+		});
 		return num === 0 ? true : false;
-	});
+	}, 10); // 最大重试10次
 	// 数据库操作结束-----------------------------------------------------------
 	return inviteCode;
 };

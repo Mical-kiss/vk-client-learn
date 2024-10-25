@@ -71,7 +71,7 @@ module.exports = {
 			// 判断是否需要设置邀请码
 			let autoSetInviteCode = vk.pubfn.getUniIdConfig(config, "autoSetInviteCode");
 			if (autoSetInviteCode) {
-				uniID.setUserInviteCode({
+				await uniID.setUserInviteCode({
 					uid: addUserRes.uid
 				});
 			}

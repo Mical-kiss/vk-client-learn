@@ -15,7 +15,7 @@ module.exports = {
 		let { data = {}, userInfo, util } = event;
 		let { uniID, vk, _ } = util;
 		let { uid } = data;
-		let res = { code : 0, msg : '' };
+		let res = { code: 0, msg: '' };
 		// 绑定
 		res = await uniID.bindAlipay(event.data);
 		// 业务逻辑结束-----------------------------------------------------------

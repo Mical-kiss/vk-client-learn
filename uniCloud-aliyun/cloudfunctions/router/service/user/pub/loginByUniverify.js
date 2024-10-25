@@ -7,7 +7,6 @@ module.exports = {
 	 * @param {String} type 							指定操作类型，可选值为login、register，不传此参数时表现为手机号已注册则登录，手机号未注册则进行注册
 	 * @param {String} password 					密码，type为register时生效
 	 * @param {String} inviteCode 				邀请人的邀请码，type为register时生效
-	 * @param {String} myInviteCode 			设置当前注册用户自己的邀请码，type为register时生效
 	 * @param {Boolean} needPermission 	设置为true时会在checkToken时返回用户权限（permission），建议在管理控制台中使用
 	 * res 返回参数说明
 	 * @param {Number} code			错误码，0表示成功
@@ -31,7 +30,6 @@ module.exports = {
 			type,
 			password,
 			inviteCode,
-			myInviteCode,
 			needPermission,
 			nickname,
 			avatar,
@@ -71,7 +69,7 @@ module.exports = {
 
 		// 通过手机号登录或注册
 		await uniID.setVerifyCode({ mobile, code, expiresIn: 60, type: "login" });
-		res = await uniID.loginBySms({ mobile, code, type, password, inviteCode, myInviteCode, needPermission });
+		res = await uniID.loginBySms({ mobile, code, type, password, inviteCode, needPermission });
 
 		if (!res.token) return res;
 		if (!res.msg) {

@@ -45,7 +45,11 @@ module.exports = {
 			});
 		}
 		// 查找用户是否存在
-		let userInfo = await vk.daoCenter.userDao.findByWhereJson(_.or(orArr));
+		let userInfo = await getCurrentAppUser({
+			whereJson: _.or(orArr),
+			clientInfo
+		}, util);
+		
 		// 定义openid和unionid存在userInfo的哪个字段中
 		let fieldInfo = {
 			[`${provider}_openid`]: {
@@ -132,7 +136,7 @@ module.exports = {
 
 		// 判断当前登录用户是否已经绑定过
 		if (appid) {
-			if (userInfo[`${provider}_openid`] && userInfo[`${provider}_openid`][`${platform}_appid`]) {
+			if (userInfo[`${provider}_openid`] && userInfo[`${provider}_openid`][`${platform}_${appid}`]) {
 				return { code: 1, msg: `当前账号已绑定${providerName}，请勿重复绑定` };
 			}
 		} else {
@@ -142,28 +146,18 @@ module.exports = {
 		}
 
 		let whereJson = {};
-		if (openid) {
-			if (appid) {
-				whereJson[`${provider}_openid.${platform}_${appid}`] = openid;
-			} else {
-				whereJson[`${provider}_openid.${platform}`] = openid;
-			}
+		if (appid) {
+			whereJson[`${provider}_openid.${platform}_${appid}`] = openid;
+		} else {
+			whereJson[`${provider}_openid.${platform}`] = openid;
 		}
+		
+		let currentAppUser = await getCurrentAppUser({
+			whereJson,
+			clientInfo
+		}, util);
 
-		let userList = await vk.daoCenter.userDao.select({
-			pageIndex: 1,
-			pageSize: 1000,
-			getMain: true,
-			whereJson
-		});
-
-		const dcloudAppid = clientInfo.APPID || clientInfo.appId;
-
-		userList = userList.filter(item => {
-			return item.dcloud_appid === undefined || item.dcloud_appid === null || item.dcloud_appid.indexOf(dcloudAppid) > -1 || item.dcloud_appid.indexOf(null) > -1;
-		});
-
-		if (userList && userList.length > 0) {
+		if (currentAppUser) {
 			return { code: 1, msg: `当前${providerName}号已绑定其他账号，请先解绑` };
 		}
 
@@ -253,4 +247,23 @@ module.exports = {
 		// 业务逻辑结束-----------------------------------------------------------
 		return res;
 	}
+}
+
+async function getCurrentAppUser (obj = {}, util) {
+	let { vk } = util;
+	let {
+		whereJson,
+		clientInfo
+	} = obj;
+	let userList = await vk.daoCenter.userDao.select({
+		pageIndex: 1,
+		pageSize: 1000,
+		getMain: true,
+		whereJson
+	});
+	const dcloudAppid = clientInfo.APPID || clientInfo.appId;
+	userList = userList.filter(item => {
+		return item.dcloud_appid === undefined || item.dcloud_appid === null || item.dcloud_appid.indexOf(dcloudAppid) > -1 || item.dcloud_appid.indexOf(null) > -1;
+	});
+	return userList && userList[0];
 }

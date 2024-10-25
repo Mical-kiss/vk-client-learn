@@ -1,3 +1,29 @@
+## 2.18.19（2024-10-18）
+* 【重要】修复第三方授权登录，如微信登录时，特殊情况下会导致账号虽然存在，但登录后一直是新注册账号的问题
+
+**特别注意**
+
+* 本次更新需要替换项目的 `/router/service/user/` 目录
+* 完整框架项目地址：`https://ext.dcloud.net.cn/plugin?id=2204`[点击查看](https://ext.dcloud.net.cn/plugin?id=2204)
+## 2.18.18（2024-10-17）
+* 【调整】注册接口统一去除 `myInviteCode` 参数，使用自动生成，防止出现重复的 `myInviteCode`
+* 【修复】`vk.pubfn.test` 在检测图片和视频时未忽略大小写的问题
+* 【新增】内置全局异常过滤器 `errorFilter`，支持将错误信息写入数据库方便搜索排错等等
+
+* 完整框架项目地址：`https://ext.dcloud.net.cn/plugin?id=2204`[点击查看](https://ext.dcloud.net.cn/plugin?id=2204)
+## 2.18.17（2024-09-04）
+* 【重要】修复 `vk.baseDao.select` 因 `2.18.13` 更新引出的当 `pageSize设置为-1或>1000` 时，可能出现查询结果不准确的问题
+* 【修复】`vk.request` 当设置 `responseType: 'arraybuffer'` 时，部分情况下无法正常接受到值的问题
+* 【优化】`vk.callFunction` 设置 `loading:true`，在请求时马上跳页面，loading参数设置不准确的问题
+
+* 完整框架项目地址：`https://ext.dcloud.net.cn/plugin?id=2204`[点击查看](https://ext.dcloud.net.cn/plugin?id=2204)
+## 2.18.16（2024-08-27）
+* 【修复】调整云对象内置的过滤器 _before，执行 return json对象时，对象内属性丢失的问题
+* 【优化】支付宝空间的数据库索引字段数据类型
+* 【优化】vk.vuex.getters 支持传参
+* 【优化】websocket支持通过device_id发送消息
+
+* 完整框架项目地址：`https://ext.dcloud.net.cn/plugin?id=2204`[点击查看](https://ext.dcloud.net.cn/plugin?id=2204)
 ## 2.18.15（2024-08-20）
 * 【修复】vk.request 部分情况下报错的问题（此问题会导致微信登录报错）
 * 【修复】weixin-js-sdk.js 在ssr方式编译时会报错的问题

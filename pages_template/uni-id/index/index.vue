@@ -17,21 +17,7 @@
 			</view>
 		</view>
 
-		<button type="default" @click="() => {
-      vk.callFunction({
-      	url: 'client/pub.test.test1',
-      	title: '请求中...',
-      	data: {
-      		
-      	},
-      	success: (data) => {
-      		// console.log(111, data)
-      	}
-      });
-			console.log(222)
-    }">测试按钮</button>
-
-		<button type="default" @click="console.log(333)">用户名和密码</button>
+		<button type="default" @click="pageTo('../password/password')">用户名和密码</button>
 		<button type="default" @click="pageTo('../mobile/mobile')">手机号和验证码</button>
 		<button type="default" @click="pageTo('../email/email')">邮箱与验证码</button>
 		<!-- #ifdef MP-WEIXIN || APP-PLUS -->
@@ -75,12 +61,10 @@
 			}
 		},
 		onLoad(options) {
-			console.log(333)
 			vk = uni.vk;
 		},
 		methods: {
 			pageTo(url){
-				console.log(444)
 				vk.navigateTo(url);
 			}
 		}

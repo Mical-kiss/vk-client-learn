@@ -11,12 +11,12 @@ module.exports = {
 	 * @param {String} msg 详细信息
 	 */
 	main: async (event) => {
-		let { util, data={} } = event;
+		let { util, data = {} } = event;
 		let { uniID } = util;
 		let res = {};
 		// 业务逻辑开始-----------------------------------------------------------
 		// 注意：虽然uid是从data中获取的，但无论前端uid传什么，最终uid都是当前登录用户的_id，因此不会出现A把B的密码改了的情况。
-		let { uid, password= '123456' } = data;
+		let { uid, password = '123456' } = data;
 		res = await uniID.resetPwd({ uid, password });
 		// 业务逻辑结束-----------------------------------------------------------
 		return res;

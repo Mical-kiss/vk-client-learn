@@ -17,9 +17,9 @@ module.exports = {
 		let { uniID } = util;
 		let res = {};
 		// 业务逻辑开始-----------------------------------------------------------
-		res = await uniID.checkToken(event.uniIdToken,{
-			needPermission:true,
-			needUserInfo:true
+		res = await uniID.checkToken(event.uniIdToken, {
+			needPermission: true,
+			needUserInfo: true
 		});
 		// 业务逻辑结束-----------------------------------------------------------
 		return res;

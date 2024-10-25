@@ -74,7 +74,9 @@ export default {
 		let locale = vk.getLocale();
 		let obj = {
 			showCancel: true,
+			// #ifndef MP-ALIPAY
 			cancelColor: "#999",
+			// #endif
 			title: localeObj.title[locale],
 			confirmText: localeObj.confirmText[locale],
 			cancelText: localeObj.cancelText[locale],
@@ -154,7 +156,37 @@ export default {
 				obj.content = c;
 			}
 		}
+		// #ifndef MP-ALIPAY
+		if (!obj.content) {
+			obj.content = "";
+		}
 		return uni.showModal(obj);
+		// #endif
+		// #ifdef MP-ALIPAY
+		return uni.prompt({
+			title: obj.title,
+			placeholder: obj.placeholderText,
+			okButtonText: obj.confirmText,
+			cancelButtonText: obj.cancelText,
+			inputValue: obj.content,
+			cancelColor: obj.cancelColor,
+			confirmColor: obj.confirmColor,
+			success: (res) => {
+				let confirm = res.ok;
+				let data = {
+					confirm,
+					cancel: !confirm,
+				};
+				if (confirm) {
+					data.content = res.inputValue;
+				}
+				obj.success(data);
+			},
+			fail: obj.fail,
+			complete: obj.complete,
+		});
+		// #endif
+
 	},
 	/**
 	vk.toast("提示内容","none");
@@ -205,8 +237,10 @@ export default {
 		return uni.showToast({
 			title: title,
 			icon: icon,
+			// #ifndef MP-ALIPAY
 			image: image,
 			mask: mask,
+			// #endif
 			duration: duration,
 			success: function(res) {
 				if (typeof fn === 'function') {
@@ -219,14 +253,15 @@ export default {
 	},
 	/**
 	 * 操作菜单
+	 let sheetList = ['位置', '@好友'];
 	 vk.showActionSheet({
-	 	title:"",
-	 	list:["位置","@好友"],
-	 	color:"rgb(0, 0, 0)",
-	 	success:function(res){
-	 		if(res.index==0){
+	 	title: '',
+	 	list: sheetList,
+	 	color: '#000000',
+	 	success: res => {
+	 		if (sheetList[res.index] == '位置') {
 
-	 		}else if(res.index==1){
+	 		} else if (sheetList[res.index] == '@好友') {
 
 	 		}
 	 	}
@@ -242,7 +277,9 @@ export default {
 		let complete = object.complete;
 		return uni.showActionSheet({
 			itemList: list,
+			// #ifndef MP-ALIPAY
 			itemColor: color,
+			// #endif
 			success: function(res) {
 				let index = res.tapIndex;
 				let text = list[index];
@@ -259,13 +296,16 @@ export default {
 			}
 		});
 	},
-	showLoading: function(obj) {
+	showLoading: function(obj = {}) {
 		if (typeof obj == "string") {
 			let title = obj;
 			obj = {
 				title: title,
 				mask: true
 			};
+		}
+		if (obj && typeof obj.mask === "undefined") {
+			obj.mask = true;
 		}
 		uni.showLoading(obj);
 	},
@@ -281,16 +321,19 @@ export default {
 				let page = pages[pages.length - 1];
 				let that = page.$vm;
 				that.loading = loading;
+				return { that, name: "loading" };
 			} else if (typeof obj === "object") {
 				let { data, name, that } = obj;
 				if (!data) data = that;
 				vk.pubfn.setData(data, name, loading);
+				return { that, name };
 			} else if (typeof obj === "string") {
 				let pages = getCurrentPages();
 				let page = pages[pages.length - 1];
 				let that = page.$vm;
 				let name = obj;
 				vk.pubfn.setData(that, name, loading);
+				return { that, name };
 			}
 		} catch (err) {}
 	},

@@ -18,16 +18,14 @@ module.exports = {
 		let { uid } = data;
 		let res = {};
 		// 业务逻辑开始-----------------------------------------------------------
-		let { 
+		let {
 			code,
 			type,
-			myInviteCode,
 			needPermission
 		} = data;
 		res = await uniID.loginByAlipay({
 			code,
 			type,
-			myInviteCode,
 			needPermission
 		});
 		if (res.token) {

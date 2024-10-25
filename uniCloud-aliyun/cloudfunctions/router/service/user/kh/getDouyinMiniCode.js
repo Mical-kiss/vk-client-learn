@@ -12,22 +12,22 @@ module.exports = {
 		let { uid } = data;
 		let res = { code: 0, msg: "" };
 		// 业务逻辑开始-----------------------------------------------------------
-		
+
 		let {
 			appid,
 			path,
 			scene
 		} = data;
-		
+
 		if (vk.pubfn.isNull(scene) && userInfo.my_invite_code) {
 			// 若scene为空,则自动带上用户邀请码
 			scene = `code=${userInfo.my_invite_code}`;
 		}
-		
+
 		if (path && scene) {
 			path = `${path}?${scene}`;
 		}
-		
+
 		res = await vk.openapi.douyin.acode.getMiniCode({
 			appid,
 			path

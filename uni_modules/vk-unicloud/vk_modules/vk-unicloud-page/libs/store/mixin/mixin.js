@@ -25,8 +25,13 @@ export default {
 				if (typeof value === "undefined") return (typeof defaultValue !== "undefined") ? defaultValue : "";
 				return JSON.parse(JSON.stringify(value));
 			};
-			vk.vuex.getters = (name) => {
-				return $store.getters[name];
+			vk.vuex.getters = (name, ...e) => {
+				let ters = $store.getters[name];
+				if (typeof ters === "function") {
+					return ters(...e);
+				} else {
+					return ters;
+				}
 			};
 			/**
 			 * 触发vuex的指定actions(异步)
