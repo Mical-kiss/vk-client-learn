@@ -49,7 +49,7 @@
     },
     "quickapp" : {},
     "mp-weixin" : {
-        "appid" : "",
+        "appid" : "wxaacc7ea07ab25361",
         "setting" : {
             "urlCheck" : false,
             "es6" : false,
@@ -95,7 +95,7 @@
             "disableHostCheck" : true
         }
     },
-    "vueVersion" : "2",
+    "vueVersion" : "3",
     "mp-qq" : {
         "setting" : {
             "urlCheck" : false,
